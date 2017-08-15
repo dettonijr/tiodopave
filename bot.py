@@ -47,7 +47,7 @@ status_phrases = [
 "tá o bagaço.",
 "tá pela capa da gaita.",
 "tá só o legume desidratado do Cup Noodles.",
-"tá só o caldinho do miojo"
+"tá só o caldinho do miojo",
 "tá só a embalagem individual da fatia do Sandwich-In.",
 "tá so o lacre do polenguinho",
 "ta só a chapa do grill",
