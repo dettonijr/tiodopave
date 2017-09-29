@@ -114,7 +114,16 @@ def start(bot, update):
 
 
 def help(bot, update):
-    update.message.reply_text('Precisa de ajuda? É simples! Digite /piada para receber uma piada especial do Tio do Pavê')
+    update.message.reply_text('''Precisa de ajuda? É simples! Digite /piada para receber uma piada especial do Tio do Pavê. Outros comandos:
+
+/joke
+/status [nome]
+/politica
+/top [subreddit]
+/random [subreddit]
+/new [subreddit]
+/defina [palavra]
+/pedrao''')
 
 def status(bot, update, args, job_queue, chat_data):
     global posts
