@@ -149,6 +149,9 @@ def status(bot, update, args, job_queue, chat_data):
 
     bot.send_message(chat_id=chat_id, text = "%s %s" % (name, phrase))
 
+def pedrao(bot, update, args, job_queue, chat_data):
+    update.message.reply_text("https://www.youtube.com/watch?v=2oc4KeGOjn4")
+
 def piada(bot, update, args, job_queue, chat_data):
     global posts
     chat_id = update.message.chat_id
@@ -312,6 +315,11 @@ def main():
     dp.add_handler(CommandHandler("help", help))
 
     # on different commands - answer in Telegram
+    dp.add_handler(CommandHandler("pedrao", pedrao,
+                                  pass_args=True,
+            	                pass_job_queue=True,
+                                pass_chat_data=True))
+    
     dp.add_handler(CommandHandler("piada", piada,
                                   pass_args=True,
             	                pass_job_queue=True,
