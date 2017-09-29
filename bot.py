@@ -292,6 +292,9 @@ def randomm(bot, update, args, job_queue, chat_data):
     except Exception as error:
         update.message.reply_text("Unknown error %s" % str(error))
         return None
+    except:
+        update.message.reply_text("uncaught exception")
+        return None
     
     n = posts
     text = n.selftext
