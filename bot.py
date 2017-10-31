@@ -47,7 +47,7 @@ status_phrases = [
 "tá o bagaço.",
 "tá pela capa da gaita.",
 "tá só o legume desidratado do Cup Noodles.",
-"tá só o caldinho do miojo"
+"tá só o caldinho do miojo",
 "tá só a embalagem individual da fatia do Sandwich-In.",
 "tá so o lacre do polenguinho",
 "ta só a chapa do grill",
@@ -123,7 +123,10 @@ def help(bot, update):
 /random [subreddit]
 /new [subreddit]
 /defina [palavra]
+<<<<<<< HEAD
 piruleta
+=======
+>>>>>>> b504c968315220bff47a28240d4a1b637d031788
 /pedrao''')
 
 def status(bot, update, args, job_queue, chat_data):
