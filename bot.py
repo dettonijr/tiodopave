@@ -123,10 +123,7 @@ def help(bot, update):
 /random [subreddit]
 /new [subreddit]
 /defina [palavra]
-<<<<<<< HEAD
-piruleta
-=======
->>>>>>> b504c968315220bff47a28240d4a1b637d031788
+/piruleta
 /pedrao''')
 
 def status(bot, update, args, job_queue, chat_data):
