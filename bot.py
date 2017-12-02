@@ -304,52 +304,16 @@ def init(praw_reddit, telegram_updater):
     
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("help", help))
-
-    dp.add_handler(CommandHandler("piruleta", piruleta,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-    # on different commands - answer in Telegram
-    dp.add_handler(CommandHandler("pedrao", pedrao,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-    
-    dp.add_handler(CommandHandler("piada", piada,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-
-    dp.add_handler(CommandHandler("joke", joke,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-
-    dp.add_handler(CommandHandler("status", status,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-    dp.add_handler(CommandHandler("politica", politica,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-    dp.add_handler(CommandHandler("top", top,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-    dp.add_handler(CommandHandler("random", randomm,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-    dp.add_handler(CommandHandler("new", new,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-    dp.add_handler(CommandHandler("defina", defina,
-                                  pass_args=True,
-            	                pass_job_queue=True,
-                                pass_chat_data=True))
-    # on noncommand i.e message - echo the message on Telegram
+    dp.add_handler(CommandHandler("piruleta", piruleta, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("pedrao", pedrao, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("piada", piada, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("joke", joke, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("status", status, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("politica", politica, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("top", top, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("random", randomm, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("new", new, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("defina", defina, pass_args=True, pass_job_queue=True, pass_chat_data=True))
 
     # log all errors
     dp.add_error_handler(error)
