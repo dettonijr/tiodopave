@@ -280,7 +280,7 @@ def new_message(bot, update):
         print("Adding chat %d %s" % (update.message.chat_id, name))
         db.add_chat(update.message.chat_id, name)
 
-def get_groups(bot, update, args, job_queue, chat_data):
+def getgroups(bot, update, args, job_queue, chat_data):
     if update.message.from_user.id != 197541486:
         print("Unauthorized")
         return None
@@ -310,7 +310,7 @@ def init(praw_reddit, telegram_updater):
     dp.add_handler(CommandHandler("new", new, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("defina", defina, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     
-    dp.add_handler(CommandHandler("get_groups", get_groups, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("getgroups", getgroups, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(MessageHandler(None, new_message), 1)
 
     # log all errors
