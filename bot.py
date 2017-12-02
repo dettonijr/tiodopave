@@ -1,19 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-# Simple Bot to reply to Telegram messages
-# This program is dedicated to the public domain under the CC0 license.
-"""
-This Bot uses the Updater class to handle the bot.
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
-"""
-
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Job
 import logging
 import praw
@@ -22,26 +6,13 @@ import random
 import urllib
 import urllib.request
 import json
-import os
-
-REDDIT_ID = os.environ['REDDIT_ID']
-REDDIT_SECRET = os.environ['REDDIT_SECRET']
-TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
-
-# Enable logging
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
-reddit = praw.Reddit(client_id=REDDIT_ID, client_secret=REDDIT_SECRET, user_agent="lol") 
 
-posts = list(reddit.subreddit("tiodopave").hot(limit=200))
-random.shuffle(posts)
-jokeposts = list(reddit.subreddit("DadJokes").hot(limit=200))
-random.shuffle(jokeposts)
-
-brasilposts = list(reddit.subreddit("brasil").hot(limit=50))
-random.shuffle(brasilposts)
+posts = []
+jokeposts = []
+brasilposts = []
+reddit = None
 
 status_phrases = [
 "tá o bagaço.",
@@ -311,9 +282,22 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 
-def main():
-    # Create the EventHandler and pass it your bot's token.
-    updater = Updater(TELEGRAM_TOKEN)
+def init(praw_reddit, telegram_updater):
+    global posts
+    global jokeposts
+    global brasilposts
+    global reddit
+
+    reddit = praw_reddit
+    updater = telegram_updater
+
+    posts = list(reddit.subreddit("tiodopave").hot(limit=200))
+    random.shuffle(posts)
+    jokeposts = list(reddit.subreddit("DadJokes").hot(limit=200))
+    random.shuffle(jokeposts)
+
+    brasilposts = list(reddit.subreddit("brasil").hot(limit=50))
+    random.shuffle(brasilposts)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -378,6 +362,3 @@ def main():
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
 
-
-if __name__ == '__main__':
-    main()
