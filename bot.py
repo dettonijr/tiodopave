@@ -287,7 +287,15 @@ def getgroups(bot, update, args, job_queue, chat_data):
     chats = db.get_chats()
     print(chats)
     update.message.reply_text("\n".join(["%d: %s" % (x, chats[x]["name"]) for x in chats.keys()]))
-   
+
+def send(bot, update, args, job_queue, chat_data):
+    if update.message.from_user.id != 197541486:
+        print("Unauthorized")
+        return None
+    chat_id = int(args[0])
+    message = " ".join(args[1:])
+
+    bot.send_message(chat_id, message)
 
 def init(praw_reddit, telegram_updater):
     global reddit
@@ -311,6 +319,7 @@ def init(praw_reddit, telegram_updater):
     dp.add_handler(CommandHandler("defina", defina, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     
     dp.add_handler(CommandHandler("getgroups", getgroups, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("send", send, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(MessageHandler(None, new_message), 1)
 
     # log all errors
