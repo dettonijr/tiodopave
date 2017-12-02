@@ -9,9 +9,6 @@ import json
 
 logger = logging.getLogger(__name__)
 
-posts = []
-jokeposts = []
-brasilposts = []
 reddit = None
 
 status_phrases = [
@@ -98,7 +95,6 @@ def help(bot, update):
 /pedrao''')
 
 def status(bot, update, args, job_queue, chat_data):
-    global posts
     chat_id = update.message.chat_id
     name = " ".join(args)
     if name == "":
@@ -128,22 +124,25 @@ def piruleta(bot, update, args, job_queue, chat_data):
     update.message.reply_text("https://www.youtube.com/watch?v=bGr_dEx58ws")
 
 def piada(bot, update, args, job_queue, chat_data):
-    global posts
     chat_id = update.message.chat_id
+    
     try:
-        n = posts[0]
-        posts = posts[1:]
-    except StopIteration:
-        posts = reddit.subreddit("tiodopave").hot(limit=50)
-        posts = list(reddit.subreddit("tiodopave").hot(limit=1000))
-        random.shuffle(posts)
-        n = posts[0]
-        posts = posts[1:]
+        posts = reddit.subreddit("tiodopave").random()
+    except prawcore.exceptions.NotFound:
+        update.message.reply_text("Not found")
+        return None
+    except Exception as error:
+        update.message.reply_text("Unknown error %s" % str(error))
+        return None
+    except:
+        update.message.reply_text("uncaught exception")
+        return None
     try:
         due = int(args[0])
     except:
         due = 30
 
+    n = posts
     sent_message = update.message.reply_text(n.title)
     def cb(bot, job):
         job.context.reply_text(n.selftext)
@@ -153,21 +152,25 @@ def piada(bot, update, args, job_queue, chat_data):
     job_queue.put(job)
 
 def joke(bot, update, args, job_queue, chat_data):
-    global jokeposts
     chat_id = update.message.chat_id
     try:
-        n = jokeposts[0]
-        jokeposts = jokeposts[1:]
-    except StopIteration:
-        jokeposts = list(reddit.subreddit("DadJokes").hot(limit=1000))
-        random.shuffle(jokeposts)
-        n = jokeposts[0]
-        posts = jokeposts[1:]
+        posts = reddit.subreddit("DadJokes").random()
+    except prawcore.exceptions.NotFound:
+        update.message.reply_text("Not found")
+        return None
+    except Exception as error:
+        update.message.reply_text("Unknown error %s" % str(error))
+        return None
+    except:
+        update.message.reply_text("uncaught exception")
+        return None
+    
     try:
         due = int(args[0])
     except:
         due = 30
 
+    n = posts
     sent_message = update.message.reply_text(n.title)
     def cb(bot, job):
         job.context.reply_text(n.selftext)
@@ -175,20 +178,6 @@ def joke(bot, update, args, job_queue, chat_data):
     job = Job(cb, due, repeat=False, context=sent_message)
     chat_data['job'] = job
     job_queue.put(job)
-
-def politica(bot, update, args, job_queue, chat_data):
-    global brasilposts
-    try:
-        n = brasilposts[0]
-        brasilposts = brasilposts[1:]
-    except StopIteration:
-        brasilposts = list(reddit.subreddit("brasil").hot(limit=100))
-        random.shuffle(brasilposts)
-        n = brasilposts[0]
-        posts = brasilposts[1:]
-
-    print (n)
-    update.message.reply_text("Titulo: %s\n\nTexto:%s\n\nURL: %s" % (n.title, n.selftext, n.shortlink))
 
 def top(bot, update, args, job_queue, chat_data):
     if len(args) == 0:
@@ -283,21 +272,10 @@ def error(bot, update, error):
 
 
 def init(praw_reddit, telegram_updater):
-    global posts
-    global jokeposts
-    global brasilposts
     global reddit
 
     reddit = praw_reddit
     updater = telegram_updater
-
-    posts = list(reddit.subreddit("tiodopave").hot(limit=200))
-    random.shuffle(posts)
-    jokeposts = list(reddit.subreddit("DadJokes").hot(limit=200))
-    random.shuffle(jokeposts)
-
-    brasilposts = list(reddit.subreddit("brasil").hot(limit=50))
-    random.shuffle(brasilposts)
 
     # Get the dispatcher to register handlers
     dp = updater.dispatcher
@@ -309,7 +287,6 @@ def init(praw_reddit, telegram_updater):
     dp.add_handler(CommandHandler("piada", piada, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("joke", joke, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("status", status, pass_args=True, pass_job_queue=True, pass_chat_data=True))
-    dp.add_handler(CommandHandler("politica", politica, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("top", top, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("random", randomm, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("new", new, pass_args=True, pass_job_queue=True, pass_chat_data=True))
