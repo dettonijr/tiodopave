@@ -286,7 +286,7 @@ def getgroups(bot, update, args, job_queue, chat_data):
         return None
     chats = db.get_chats()
     print(chats)
-    update.message.reply_text("\n".join(["%d: %s" % (x, chats[x]["name"]) for x in chats.keys()]))
+    update.message.reply_text("\n".join(["%s: %s" % (x, chats[x]["name"]) for x in chats.keys()]))
 
 def send(bot, update, args, job_queue, chat_data):
     if update.message.from_user.id != 197541486:

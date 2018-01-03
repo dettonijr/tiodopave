@@ -1,8 +1,8 @@
-import pickle
+import json
 
-DB_FILE = "bot.db"
+DB_FILE = "botdb.json"
 try:
-    db = pickle.load(open(DB_FILE, "rb"))
+    db = json.load(open(DB_FILE, "r"))
 except FileNotFoundError:
     db = {"chats": {}}
 
@@ -15,7 +15,7 @@ def add_chat(chat_id, name):
     global db
     chats = db["chats"]
     chats[chat_id] = {"name":name}
-    pickle.dump(db, open(DB_FILE, "wb"))
+    json.dump(db, open(DB_FILE, "w"), ensure_ascii=False, indent=True)
 
 def get_chats():
     global db
