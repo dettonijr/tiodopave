@@ -272,7 +272,8 @@ def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
 
 def new_message(bot, update):
-    if update.message.chat_id not in db.get_chats().keys():
+    open("log", "a").write(str(update) + "\n")
+    if str(update.message.chat_id) not in db.get_chats().keys():
         if update.message.chat.type == "group":
             name = update.message.chat.title
         elif update.message.chat.type == "private":
