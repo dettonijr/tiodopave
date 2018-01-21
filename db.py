@@ -1,10 +1,11 @@
 import json
+import random
 
 DB_FILE = "botdb.json"
 try:
     db = json.load(open(DB_FILE, "r"))
 except FileNotFoundError:
-    db = {"chats": {}}
+    db = {"chats": {}, "insults":[]}
 
 def is_chat(chat_id):
     global db
@@ -21,3 +22,8 @@ def get_chats():
     global db
     chats = db["chats"]
     return chats
+
+def get_random_insult():
+    global db
+    otario = random.choice(db["insults"])
+    return otario

@@ -120,6 +120,12 @@ def status(bot, update, args, job_queue, chat_data):
 
     bot.send_message(chat_id=chat_id, text = "%s %s" % (name, phrase))
 
+def insult(bot, update, args, job_queue, chat_data):
+    chat_id = update.message.chat_id
+    name = " ".join(args)
+    phrase = db.get_random_insult()
+    bot.send_message(chat_id=chat_id, text = phrase % (name,))
+
 def pedrao(bot, update, args, job_queue, chat_data):
     update.message.reply_text("https://www.youtube.com/watch?v=2oc4KeGOjn4")
 
@@ -328,6 +334,7 @@ def init(praw_reddit, telegram_updater):
     dp.add_handler(CommandHandler("defina", defina, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("callgava", callgava, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("patronus", patronus, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("insult", insult, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     
     dp.add_handler(CommandHandler("getgroups", getgroups, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("send", send, pass_args=True, pass_job_queue=True, pass_chat_data=True))
