@@ -95,6 +95,7 @@ def help(bot, update):
 /piruleta
 /callgava
 /patronus
+/insult [nome]
 /pedrao''')
 
 def status(bot, update, args, job_queue, chat_data):
@@ -312,6 +313,15 @@ def send(bot, update, args, job_queue, chat_data):
 
     bot.send_message(chat_id, message)
 
+def sendall(bot, update, args, job_queue, chat_data):
+    if update.message.from_user.id != 197541486:
+        print("Unauthorized")
+        return None
+    message = " ".join(args)
+    chats = db.get_chats()
+    for chat_id in chats.keys():
+        bot.send_message(int(chat_id), message)
+
 def init(praw_reddit, telegram_updater):
     global reddit
 
@@ -338,6 +348,7 @@ def init(praw_reddit, telegram_updater):
     
     dp.add_handler(CommandHandler("getgroups", getgroups, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("send", send, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("sendall", sendall, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(MessageHandler(None, new_message), 1)
 
     # log all errors
