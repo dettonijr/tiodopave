@@ -96,7 +96,8 @@ def help(bot, update):
 /callgava
 /patronus
 /insult [nome]
-/pedrao''')
+/pedrao
+/food''')
 
 def status(bot, update, args, job_queue, chat_data):
     chat_id = update.message.chat_id
