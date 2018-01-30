@@ -132,6 +132,7 @@ def pedrao(bot, update, args, job_queue, chat_data):
 
 def callgava(bot, update, args, job_queue, chat_data):
     bot.send_sticker(chat_id=update.message.chat_id, sticker='CAADAQADBwADF4ANCZcGChbGYaPyAg')
+    bot.send_message(chat_id=update.message.chat_id, text = "@gggava")
 
 def patronus(bot, update, args, job_queue, chat_data):
     bot.send_sticker(chat_id=update.message.chat_id, sticker='CAADAQADdQMAAsPLAAEIjFqF6FFVzlIC')
