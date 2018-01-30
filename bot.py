@@ -121,6 +121,24 @@ def status(bot, update, args, job_queue, chat_data):
 
     bot.send_message(chat_id=chat_id, text = "%s %s" % (name, phrase))
 
+def food(bot, update, args, job_queue, chat_data):
+    try:
+        posts = list(reddit.subreddit("food").hot(limit=100))
+        rand = random.choice(posts)
+        url = rand.url
+        chat_id = update.message.chat_id
+        bot.send_photo(chat_id=chat_id, photo=url)
+    except prawcore.exceptions.NotFound:
+        update.message.reply_text("Not found")
+        return None
+    except Exception as error:
+        update.message.reply_text("Unknown error %s" % str(error))
+        return None
+    except:
+        update.message.reply_text("uncaught exception")
+        return None
+    
+
 def insult(bot, update, args, job_queue, chat_data):
     chat_id = update.message.chat_id
     name = " ".join(args)
@@ -346,6 +364,7 @@ def init(praw_reddit, telegram_updater):
     dp.add_handler(CommandHandler("callgava", callgava, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("patronus", patronus, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("insult", insult, pass_args=True, pass_job_queue=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler("food", food, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     
     dp.add_handler(CommandHandler("getgroups", getgroups, pass_args=True, pass_job_queue=True, pass_chat_data=True))
     dp.add_handler(CommandHandler("send", send, pass_args=True, pass_job_queue=True, pass_chat_data=True))
