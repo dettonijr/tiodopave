@@ -7,6 +7,9 @@ import urllib
 import urllib.request
 import json
 import db
+from bs4 import BeautifulSoup
+import requests
+
 
 logger = logging.getLogger(__name__)
 
@@ -257,29 +260,53 @@ def new(bot, update, args, job_queue, chat_data):
 
     update.message.reply_text("Titulo: %s\n\nTexto:%s\n\nURL: %s" % (n.title, text, n.shortlink))
 
-def defina(bot, update, args, job_queue, chat_data):
-    if len(args) == 0:
-        return None
-    palavra = args[0]    
+def dicionario_informal(word):
+    r = requests.get("https://www.dicionarioinformal.com.br/%s" % word)
+    soup = BeautifulSoup(r.text, 'html.parser')
+   
+    cards = soup.find_all('div', {'class': 'card'})
+    
+    cards_in_main = filter(lambda x: 'id' in x.parent.attrs and x.parent.attrs['id'] == 'main-feed', cards)
+    
+    card_bodies = filter(bool, map(lambda x: x.find('div', {'class': 'card-body'}), cards_in_main))
+    
+    texts = list(map(lambda x: x.find('p').text.strip(), filter(lambda x: x.find('p'), card_bodies)))
+    
+    return texts[:-1][:3]
+
+def dicionario_aberto(word):
     try:
-        f = urllib.request.urlopen("http://dicionario-aberto.net/search-json/" + urllib.parse.quote(palavra))
+        f = urllib.request.urlopen("http://dicionario-aberto.net/search-json/" + urllib.parse.quote(word))
         j = json.loads(str(f.read(), "utf-8"))        
     except urllib.error.HTTPError as error:
         if error.code == 404:
-            update.message.reply_text("Not found")
+            return []
         else:
-            update.message.reply_text("Error %d" % error.code)
+            raise
+
+    return [x['def'] for x in  j['entry']['sense']]
+
+def defina(bot, update, args, job_queue, chat_data):
+    if len(args) == 0:
         return None
+    
+    palavra = ' '.join(args)
+    
+    items = []
+    try:
+        items = dicionario_informal(palavra)
     except Exception as error:
         update.message.reply_text("Unknown error %s" % str(error))
         return None
-    items = j['entry']['sense']
-    if len(items) > 1:
+   
+    if len(items) == 0:
+        update.message.reply_text("Not found")
+    elif len(items) > 1:
         update.message.reply_text(
-          "\n".join(["%d) %s" % (i + 1, x['def']) for i, x in enumerate(items)])
+          "\n".join(["%d) %s" % (i + 1, x) for i, x in enumerate(items)])
         )
     else:
-        update.message.reply_text(items[0]['def'])
+        update.message.reply_text(items[0])
 
 def randomm(bot, update, args, job_queue, chat_data):
     if len(args) == 0:
