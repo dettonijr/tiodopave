@@ -296,6 +296,7 @@ def dicionario_aberto(word):
 
 def defina(bot, update, args, job_queue, chat_data):
     if len(args) == 0:
+        update.message.reply_text("Usage: /defina [palavra]")
         return None
     
     palavra = ' '.join(args)
