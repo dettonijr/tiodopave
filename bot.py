@@ -222,7 +222,7 @@ def top(bot, update, args, job_queue, chat_data):
     if len(args) == 0:
         return None
     try:
-        posts = list(reddit.subreddit(args[0]).hot(limit=1))
+        posts = list(reddit.subreddit(args[0]).top(limit=1))
     except prawcore.exceptions.NotFound:
         update.message.reply_text("Not found")
         return None
