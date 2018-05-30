@@ -9,6 +9,7 @@ import json
 import db
 from bs4 import BeautifulSoup
 import requests
+import mimetypes
 
 
 logger = logging.getLogger(__name__)
@@ -218,6 +219,23 @@ def joke(bot, update, args, job_queue, chat_data):
     chat_data['job'] = job
     job_queue.put(job)
 
+def is_url_image(url):    
+    mimetype,encoding = mimetypes.guess_type(url)
+    return (mimetype and mimetype.startswith('image'))
+
+def send_reddit_post(bot, update, post):
+    url = post.url
+    
+    if is_url_image(url):
+        chat_id = update.message.chat_id
+        bot.send_photo(chat_id=chat_id, photo=url)
+    else:
+        text = post.selftext
+        if len(text) > 500:
+            text = text[:500] + " [...]"
+
+        update.message.reply_text("Titulo: %s\n\nTexto:%s\n\nURL: %s" % (post.title, text, post.shortlink))
+
 def top(bot, update, args, job_queue, chat_data):
     if len(args) == 0:
         return None
@@ -232,12 +250,7 @@ def top(bot, update, args, job_queue, chat_data):
     
     if len(posts) == 0:
         return None
-    n = posts[0]
-    text = n.selftext
-    if len(text) > 500:
-        text = text[:500] + " [...]"
-
-    update.message.reply_text("Titulo: %s\n\nTexto:%s\n\nURL: %s" % (n.title, text, n.shortlink))
+    send_reddit_post(bot, update, posts[0])
 
 def new(bot, update, args, job_queue, chat_data):
     if len(args) == 0:
@@ -253,12 +266,7 @@ def new(bot, update, args, job_queue, chat_data):
     
     if len(posts) == 0:
         return None
-    n = posts[0]
-    text = n.selftext
-    if len(text) > 500:
-        text = text[:500] + " [...]"
-
-    update.message.reply_text("Titulo: %s\n\nTexto:%s\n\nURL: %s" % (n.title, text, n.shortlink))
+    send_reddit_post(bot, update, posts[0])
 
 def dicionario_informal(word):
     r = requests.get("https://www.dicionarioinformal.com.br/%s" % word)
@@ -323,12 +331,7 @@ def randomm(bot, update, args, job_queue, chat_data):
         update.message.reply_text("uncaught exception")
         return None
     
-    n = posts
-    text = n.selftext
-    if len(text) > 500:
-        text = text[:500] + " [...]"
-
-    update.message.reply_text("Titulo: %s\n\nTexto:%s\n\nURL: %s" % (n.title, text, n.shortlink))
+    send_reddit_post(bot, update, posts)
 
 def error(bot, update, error):
     logger.warn('Update "%s" caused error "%s"' % (update, error))
